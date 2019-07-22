@@ -6,8 +6,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,6 +18,7 @@ public class AutomataElementary  extends absAutomataCellular{
     private int stage;
     private String rule;
     private int[] binaryRules;
+    private boolean opcion_vector;
     private ArrayList<RuleElementary> rules;
     private FileManager file;
         
@@ -38,12 +37,13 @@ public class AutomataElementary  extends absAutomataCellular{
     }
 
     
-    public void setAll(int stage, int[] rules,String rule, int side) {        
+    public void setAll(int stage, int[] rules,String rule, int side, boolean opcion_vector) {        
         this.stage = stage;
         this.loadRules(rules);
         this.setSide(side);
         this.binaryRules=rules;
         this.rule=rule;
+        this.opcion_vector=opcion_vector;
         this.file=new FileManager("Autómata elemental");
         //this.id=1;//ID de un autómata elemental
     }
@@ -102,14 +102,36 @@ public class AutomataElementary  extends absAutomataCellular{
     //inicializar matriz  de celulas por defecto
     @Override
     public void initCells(){
+        if(this.opcion_vector){
+            this.init_vector();
+        }else{
+            this.initDefault();
+        }
+    }
+    
+    private void init_vector(){
+        int num_cel;
+        int aux;
+        num_cel=this.side/3;        
+        this.initZero();
+        for (int i=0;i<num_cel;i++){
+            aux=(int) (Math.random() *(this.side-1));   
+            this.cells[0][aux].setState(1);
+        }                                
+    }
+    
+    private void initDefault(){        
+        this.initZero();
+        //iniciar una sola celula en 1
+        this.cells[0][1+this.side/2].setState(1);
+    }
+    
+    private void initZero(){
         for(int i=0;i<this.side;i++){
             for(int j=0;j<this.side;j++){
                 this.cells[i][j]=new Cellula(0);                
             }
-        }
-        
-        //iniciar una sola celula en 1
-        this.cells[0][1+this.side/2].setState(1);
+        }        
     }
     
     //Iniciar simulación

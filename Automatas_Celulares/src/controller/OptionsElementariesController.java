@@ -39,12 +39,16 @@ public class OptionsElementariesController extends ButtonController{
     @Override
     public void actualizar() {
         int numIter,sizeSimulation,ruleNumber;
+        int opcion=0;
+        boolean opcion_b=false;
         OptionsElementaries viewE=(OptionsElementaries)this.view;        
         numIter=viewE.getNumberIterations();
         ruleNumber=viewE.getRuleNumber();
         sizeSimulation=viewE.getSizeSimulation();
         if(numIter != -1 && ruleNumber != -1 && sizeSimulation != -1){
-            ((AutomataElementary)this.model).setAll(numIter,this.obtenerBinario(ruleNumber),Integer.toString(ruleNumber),sizeSimulation);
+            opcion = JOptionPane.showConfirmDialog(null, "¿Desea  generar vector inicial aleatorio?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            opcion_b=opcion==0?true:false;
+            ((AutomataElementary)this.model).setAll(numIter,this.obtenerBinario(ruleNumber),Integer.toString(ruleNumber),sizeSimulation,opcion_b);
             ((AutomataElementary)this.model).start();
         }else{
             JOptionPane.showMessageDialog(null, "Datos incorrectos intente de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
