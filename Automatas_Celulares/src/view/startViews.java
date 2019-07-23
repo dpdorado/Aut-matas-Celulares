@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import javax.swing.JFrame;
@@ -22,7 +23,10 @@ public class startViews extends JFrame{
         this.setTitle("Trabajo final TDS - Autómatas celulares.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         this.MarcoCentrado();
-        this.add(content=new pnViewPrincipla());
+        content=new JPanel();
+        content.setLayout(new BorderLayout());
+        content.add(new pnViewPrincipla(),BorderLayout.CENTER);
+        this.add(content);
     }
      
     public void MarcoCentrado(){		
