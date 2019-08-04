@@ -146,8 +146,9 @@ public class OprionsLife extends JPanel implements View{
     }
     
     @Override
-    public void actualizar(Model aModel) {
+    public boolean actualizar(Model aModel) {
         //TODO:
+        return true;
     }
 
     @Override

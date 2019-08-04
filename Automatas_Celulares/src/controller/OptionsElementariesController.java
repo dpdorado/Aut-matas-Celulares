@@ -48,31 +48,12 @@ public class OptionsElementariesController extends ButtonController{
         if(numIter != -1 && ruleNumber != -1 && sizeSimulation != -1){
             opcion = JOptionPane.showConfirmDialog(null, "¿Desea  generar vector inicial aleatorio?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             opcion_b=opcion==0?true:false;
-            ((AutomataElementary)this.model).setAll(numIter,this.obtenerBinario(ruleNumber),Integer.toString(ruleNumber),sizeSimulation,opcion_b);
+            ((AutomataElementary)this.model).setAll(numIter,ruleNumber,Integer.toString(ruleNumber),sizeSimulation,opcion_b);
             ((AutomataElementary)this.model).start();
         }else{
             JOptionPane.showMessageDialog(null, "Datos incorrectos intente de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-    }
-
-    public int[] obtenerBinario(int numero){
-        int[] result=new int[8];
-        String binariString=Integer.toBinaryString(numero);             
-        char[] aux =binariString.toCharArray();
-        int tmn_aux=aux.length;
-        int res=result.length-tmn_aux;
-        int index_aux=0;
-        for(int i=0;i<tmn_aux;i++){
-            result[i]=0;
-        }
-        
-        for(int i=res;i<result.length;i++){
-            result[i]= Integer.parseInt("" + (aux[index_aux]));
-            index_aux++;
-        }
-             
-        return result;
-    }
+    }    
     
 }

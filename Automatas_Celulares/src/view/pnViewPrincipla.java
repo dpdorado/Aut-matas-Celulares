@@ -8,8 +8,6 @@ package view;
 import controller.ViewPrincipalController;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +52,7 @@ public class pnViewPrincipla extends JPanel implements View{
 
         jLabel1.setText("Tipo simulación: ");
 
-        cbxTypeSimulation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Juego de la vida", "Automatas elementales" }));
+        cbxTypeSimulation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Juego de la vida", "Automatas elementales", "Newman" }));
 
         pnOptions.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -155,100 +153,53 @@ public class pnViewPrincipla extends JPanel implements View{
     public JComboBox getTypeAutomata(){
         return this.cbxTypeSimulation;
     }
-    
-    
+        
     private void initController(){
         ViewPrincipalController controller=new ViewPrincipalController(this,null); 
         this.cbxTypeSimulation.addItemListener(controller);
     }
     
     @Override
-    public void actualizar(Model aModel) {        
-        this.loadBoard(aModel);
+    public boolean actualizar(Model aModel) {        
+        this.loadBoard(aModel);        
+         return true;
     }
     @Override
     public void actualizar(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "TDS", JOptionPane.INFORMATION_MESSAGE);
-    }
+    }    
     
     
-    /*private void loadBoard(Model aModel){ 
-        
-        absAutomataCellular automata=(absAutomataCellular)aModel;
-        int side=automata.getSide();
-        Cellula[][] cells = automata.getCells();
-        if(automata.getBandera()==0){            
-            simu=new JPanel(){            
-                public void paint(Graphics g){
-                    super.paint(g);
-                    Graphics2D g2d = (Graphics2D)g;                    
-                    
-                    for(int y=0;y<side;y++){
-                            
-                        for(int x=0;x<side;x++) {
-                            if(cells[y][x].getState()==0){
-                                int l=0,k=0;
-                                l=x*5;  //multiplicado por tamaño del cuadro
-                                k=y*5;
-                                g.setColor(Color.WHITE);
-                                g.fillRect(l,k, 5, 5);
-                            }
-                            else {
-                                int a=0,b=0;
-                                a=x*5;
-                                b=y*5;
-                                g.setColor(Color.BLACK);
-                                g.fillRect(a, b, 5, 5);		
-                            }
-                        }                       
-                    }                                                                                 
-        
-                }
-               
-            };                                          
-            this.pnSimulation.removeAll();           
-            this.pnSimulation.setLayout(new BorderLayout());
-            this.pnSimulation.add(simu,BorderLayout.CENTER);           
-        }else{
-            this.simu.repaint();
-        }                     
-        this.pnSimulation.updateUI();  
-        try {
-            Thread.sleep(9);
-        } catch (InterruptedException ex) {
-        }      
-    } */
-    
-    private void loadBoard(Model aModel){ 
-        
+    private void loadBoard(Model aModel){         
         absAutomataCellular automata=(absAutomataCellular)aModel;
         int side=automata.getSide();
         Cellula[][] cells = automata.getCells();
         JPanel panel= this.pnBoard;        
         if (this.buttons==null){
             panel.setLayout(new GridLayout(side,side,0,0));
-            this.buttons=this.initGrid(panel, side);
+            this.initGrid(panel, side);
         }else if(((GridLayout)panel.getLayout()).getRows()!=side){
             panel.setLayout(new GridLayout(side,side,0,0));
-            this.buttons=this.initGrid(panel, side);
-        }      
-        this.initColors(buttons, side, cells);
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException ex) {
-        }      
+            this.initGrid(panel, side);
+        }   
+        this.maquillaTablero(side);      
+        this.initColors(this.buttons, side, cells);           
     }    
-    private JButton[][] initGrid(JPanel panel, int side){
+    private void initGrid(JPanel panel, int side){
         panel.removeAll();
         this.buttons=new JButton[side][side];
         for (int i=0;i<side;i++){
             for(int j=0;j<side;j++){
                 JButton button=new JButton();
-                buttons[i][j]=button;
+                String id = String.valueOf(i) +"-" + String.valueOf(j);
+                button.setName(id);
+                
+                button.setSize(5, 5);
+                button.setToolTipText(id);
+                buttons[i][j]=button; 
                 panel.add(button);
             }
         } 
-        return buttons;
     }
     private void initColors(JButton[][] buttons,int side,Cellula[][] cells){                       
         for (int i=0;i<side;i++){
@@ -265,5 +216,15 @@ public class pnViewPrincipla extends JPanel implements View{
         }
         this.pnBoard.updateUI();
     }
+    public void maquillaTablero(int size)
+    {
+        for(int i = 0 ; i < size ; i++)
+        {
+            for(int j = 0; j < size ; j++)
+            {
+                this.buttons[i][j].setBackground(Color.BLACK);
+            }
+        }
     
+    }
 }

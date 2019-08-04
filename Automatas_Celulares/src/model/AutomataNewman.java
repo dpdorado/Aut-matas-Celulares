@@ -5,31 +5,27 @@
  */
 package model;
 
-
-
-
-
 /**
  *
  * @author DD
  */
-public class GameOfLife extends absAutomataCellular{
+public class AutomataNewman extends absAutomataCellular{
     private int stage;   
     private int liveProportion;
-    private RuleLife rule;
+    private RuleNewman rule;
     private FileManager file;
 
-    public GameOfLife(){
+    public AutomataNewman(){
         super(1);
         //this.id=2;//ID de un autómata del juego de la vida
     }
     
-    public GameOfLife(int stage, int side, int liveProportion) {
+    public AutomataNewman(int stage, int side, int liveProportion) {
         super(side);
         this.stage = stage;
         this.side = side;
         this.liveProportion = liveProportion;
-        rule=new RuleLife();
+        rule=new RuleNewman();
         //this.id=2;//ID de un autómata del juego de la vida
     }
     
@@ -37,8 +33,8 @@ public class GameOfLife extends absAutomataCellular{
         this.stage = stage;
         this.setSide(side);
         this.liveProportion = liveProportion;
-        rule=new RuleLife();
-        this.file=new FileManager("Juego de la vida");
+        rule=new RuleNewman();
+        this.file=new FileManager("Newman");
         //this.id=2;//ID de un autómata del juego de la vida
     }
     
@@ -87,7 +83,7 @@ public class GameOfLife extends absAutomataCellular{
     @Override
     public void start(){        
         int count=0;        
-        int[] states=new int[9];
+        int[] states=new int[5];
         this.initCells();
         this.writeCharacteristics();
         this.bandera=0;
@@ -97,92 +93,52 @@ public class GameOfLife extends absAutomataCellular{
             for(int i=0;i<this.side;i++){
                 for(int j=0;j<this.side;j++){                   
                     if(i>0 && i<this.side-1 && j>0 && j<this.side-1){                                                                                   
-                        states[0]=this.cells[i][j-1].getState();//izquierda
-                        states[1]=this.cells[i][j+1].getState();//derecha
-                        states[2]=this.cells[i-1][j].getState();//arriba
-                        states[3]=this.cells[i+1][j].getState();//abajo
-                        states[4]=this.cells[i-1][j-1].getState();//superior izquierda
-                        states[5]=this.cells[i-1][j+1].getState();//superior derecha
-                        states[6]=this.cells[i+1][j-1].getState();//inferior isquierda
-                        states[7]=this.cells[i+1][j+1].getState(); //inferior derecha                      
+                        states[0]=this.cells[i][j-1].getState();
+                        states[1]=this.cells[i][j+1].getState();
+                        states[2]=this.cells[i-1][j].getState();
+                        states[3]=this.cells[i+1][j].getState();
                     }else if(i==0 && j==0){
                         states[0]=this.cells[i][this.side-1].getState();
                         states[1]=this.cells[i][j+1].getState();
                         states[2]=this.cells[this.side-1][j].getState();
                         states[3]=this.cells[i+1][j].getState();
-                        states[4]=this.cells[this.side-1][this.side-1].getState();
-                        states[5]=this.cells[this.side-1][j+1].getState();
-                        states[6]=this.cells[i+1][this.side-1].getState();
-                        states[7]=this.cells[i+1][j+1].getState();                        
                     }else if(i==0 && j==this.side-1){
                         states[0]=this.cells[i][j-1].getState();
                         states[1]=this.cells[i][0].getState();
                         states[2]=this.cells[this.side-1][j].getState();
                         states[3]=this.cells[i+1][j].getState();                        
-                        states[4]=this.cells[this.side-1][j-1].getState();
-                        states[5]=this.cells[this.side-1][0].getState();
-                        states[6]=this.cells[i+1][j-1].getState();
-                        states[7]=this.cells[i+1][0].getState();                        
-                    }else if(i==this.side-1 && j==0){  
-                        //4
+                    }else if(i==this.side-1 && j==0){                     
                         states[0]=this.cells[i][this.side-1].getState();
                         states[1]=this.cells[i][j+1].getState();
                         states[2]=this.cells[i-1][j].getState();
                         states[3]=this.cells[0][j].getState();
-                        states[4]=this.cells[i-1][this.side-1].getState();
-                        states[5]=this.cells[i-1][j+1].getState();
-                        states[6]=this.cells[0][this.side-1].getState();
-                        states[7]=this.cells[0][j+1].getState();                        
-                    }else if(i==this.side-1 && j==this.side-1){   
-                        //5
+                    }else if(i==this.side-1 && j==this.side-1){                      
                         states[0]=this.cells[i][j-1].getState();
                         states[1]=this.cells[i][0].getState();
                         states[2]=this.cells[i-1][j].getState();
                         states[3]=this.cells[0][j].getState();
-                        states[4]=this.cells[i-1][j-1].getState();
-                        states[5]=this.cells[i-1][0].getState();
-                        states[6]=this.cells[0][j-1].getState();
-                        states[7]=this.cells[0][0].getState();                        
-                    }else if(i==0){ 
-                        //6
+                    }else if(i==0){                        
                         states[0]=this.cells[i][j-1].getState();
                         states[1]=this.cells[i][j+1].getState();
                         states[2]=this.cells[this.side-1][j].getState();
                         states[3]=this.cells[i+1][j].getState();
-                        states[4]=this.cells[this.side-1][j-1].getState();
-                        states[5]=this.cells[this.side-1][j+1].getState();
-                        states[6]=this.cells[i+1][j-1].getState();
-                        states[7]=this.cells[i+1][j+1].getState();                        
                     }else if(i==this.side-1){
-                        //7
                         states[0]=this.cells[i][j-1].getState();
                         states[1]=this.cells[i][j+1].getState();
                         states[2]=this.cells[i-1][j].getState();
                         states[3]=this.cells[0][j].getState();
-                        states[4]=this.cells[i-1][j-1].getState();
-                        states[5]=this.cells[i-1][j+1].getState();
-                        states[6]=this.cells[0][j-1].getState();
-                        states[7]=this.cells[0][0+1].getState();                        
                     }else if(j==0){
                         states[0]=this.cells[i][this.side-1].getState();
                         states[1]=this.cells[i][j+1].getState();
                         states[2]=this.cells[i-1][j].getState();
                         states[3]=this.cells[i+1][j].getState();
-                        states[4]=this.cells[i-1][this.side-1].getState();
-                        states[5]=this.cells[i-1][j+1].getState();
-                        states[6]=this.cells[i+1][this.side-1].getState();
-                        states[7]=this.cells[i+1][j+1].getState();                        
                     }else if(j==this.side-1){
                         states[0]=this.cells[i][j-1].getState();
                         states[1]=this.cells[i][0].getState();
                         states[2]=this.cells[i-1][j].getState();
                         states[3]=this.cells[i+1][j].getState();
-                        states[4]=this.cells[i-1][j-1].getState();
-                        states[5]=this.cells[i-1][0].getState();
-                        states[6]=this.cells[i+1][j-1].getState();
-                        states[7]=this.cells[i+1][0].getState();                        
-                    }                                                                                                   
-                    states[8]=this.cells[i][j].getState();
+                    }
+                    states[4]=this.cells[i][j].getState();
                     this.cells[i][j].setState(this.rule.getState(states));
                 }
             }           

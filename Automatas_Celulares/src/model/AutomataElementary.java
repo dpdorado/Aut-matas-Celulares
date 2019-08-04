@@ -37,11 +37,11 @@ public class AutomataElementary  extends absAutomataCellular{
     }
 
     
-    public void setAll(int stage, int[] rules,String rule, int side, boolean opcion_vector) {        
+    public void setAll(int stage, int ruleNumber,String rule, int side, boolean opcion_vector) {        
         this.stage = stage;
-        this.loadRules(rules);
-        this.setSide(side);
-        this.binaryRules=rules;
+        this.binaryRules=this.obtenerBinario(ruleNumber);
+        this.loadRules(this.binaryRules);
+        this.setSide(side);        
         this.rule=rule;
         this.opcion_vector=opcion_vector;
         this.file=new FileManager("Autómata elemental");
@@ -62,7 +62,24 @@ public class AutomataElementary  extends absAutomataCellular{
     public void setRules(ArrayList<RuleElementary> rules) {
         this.rules = rules;
     }
- 
+    public int[] obtenerBinario(int numero){
+        int[] result=new int[8];
+        String binariString=Integer.toBinaryString(numero);             
+        char[] aux =binariString.toCharArray();
+        int tmn_aux=aux.length;
+        int res=result.length-tmn_aux;
+        int index_aux=0;
+        for(int i=0;i<tmn_aux;i++){
+            result[i]=0;
+        }
+        
+        for(int i=res;i<result.length;i++){
+            result[i]= Integer.parseInt("" + (aux[index_aux]));
+            index_aux++;
+        }
+             
+        return result;
+    }
     
     //Cargamos las 8 reglas
     private void loadRules(int[] rules){
@@ -123,7 +140,7 @@ public class AutomataElementary  extends absAutomataCellular{
     private void initDefault(){        
         this.initZero();
         //iniciar una sola celula en 1
-        this.cells[0][1+this.side/2].setState(1);
+        this.cells[0][this.side/2].setState(1);
     }
     
     private void initZero(){
@@ -142,9 +159,9 @@ public class AutomataElementary  extends absAutomataCellular{
         this.writeCharacteristics();
         this.bandera=0;
         this.notificar();   
-        this.bandera=1;
+        this.bandera=1;        
         for(int i=1;i<this.side;i++){
-            if (i>this.stage){
+            if (i+1>this.stage){
                 break;
             }
             for(int j=0;j<this.side;j++){
@@ -161,7 +178,7 @@ public class AutomataElementary  extends absAutomataCellular{
                 }
                 this.cells[i][j].setState(this.getStetateNew(states));
             }     
-            this.writeIteration(i);
+            this.writeIteration(i+1);
             this.notificar();            
         }       
         this.notificarMensaje("Informe creado.");
@@ -188,7 +205,7 @@ public class AutomataElementary  extends absAutomataCellular{
         file.writeLine("Regla número: " + this.rule);
         file.writeLine("Regla en binario: " + this.getRuleString());
         file.writeLine("Celulas iniciales");
-        this.writeIteration(0);
+        this.writeIteration(1);
         file.writeLine("*****************************************************************");        
     }
      

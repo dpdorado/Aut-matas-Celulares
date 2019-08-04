@@ -146,8 +146,9 @@ public class OptionsElementaries extends JPanel implements View{
     }
     
     @Override
-    public void actualizar(Model aModel) {
+    public boolean actualizar(Model aModel) {
         //TODO:
+        return true;
     }
      @Override
     public void actualizar(String mensaje) {

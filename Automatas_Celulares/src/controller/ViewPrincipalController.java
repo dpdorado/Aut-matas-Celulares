@@ -7,10 +7,12 @@ package controller;
 
 import javax.swing.JComboBox;
 import model.AutomataElementary;
+import model.AutomataNewman;
 import model.GameOfLife;
 import model.Model;
 import view.OprionsLife;
 import view.OptionsElementaries;
+import view.OptionsNewman;
 import view.View;
 import view.pnViewPrincipla;
 
@@ -48,6 +50,14 @@ public class ViewPrincipalController extends ItemChangeController{
             OprionsLife viewE=new OprionsLife();
             GameOfLife automata=new GameOfLife();
             OptionsLifeController controller=new OptionsLifeController(viewE,automata);
+            controller.setViewPrincipal(this.view);   //sobra????                       
+            viewE.setController(controller);            
+            automata.setView(this.view);
+            view.setOptions(viewE);
+        }else if(item.equals("Newman")){
+            OptionsNewman viewE=new OptionsNewman();
+            AutomataNewman automata=new AutomataNewman();
+            OptionsNewmanController controller=new OptionsNewmanController(viewE,automata);
             controller.setViewPrincipal(this.view);   //sobra????                       
             viewE.setController(controller);            
             automata.setView(this.view);

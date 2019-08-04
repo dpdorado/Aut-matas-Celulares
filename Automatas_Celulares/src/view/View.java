@@ -8,7 +8,7 @@ import model.Model;
  */
 
 public interface  View{
-    public void actualizar(Model aModel);  
+    public boolean actualizar(Model aModel);  
     public void actualizar(String mensaje);  
 }
 

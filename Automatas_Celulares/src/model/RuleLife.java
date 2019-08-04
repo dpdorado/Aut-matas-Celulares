@@ -10,19 +10,40 @@ package model;
  * @author DD
  */
 
+/*Una célula muerta con exactamente 3 células vecinas vivas "nace" (es decir, al turno siguiente estará viva).
+Una célula viva con 2 o 3 células vecinas vivas sigue viva, en otro caso muere (por "soledad" o "superpoblación").*/
+
 //0 muerto
 //1 vivo
 public class RuleLife {
     public RuleLife(){}
     
     //Con 2 0 3 en estado vivo queda viva
-    public int getState(int[] states){        
-        int count=0;
-        for (int i=0;i<states.length;i++){
+    public int getState(int[] states){   
+        int cellLife=0;
+        int cellDead=0;//No se utiliza
+        int size=states.length;
+        int state=0;
+        
+        for (int i=0;i<size-1;i++){
             if(states[i]==1){
-                count++;
+                cellLife++;
+            }else{
+                cellDead++;//No se utiliza
             }
-        }        
-        return count==2||count==3?1:0;
+        }
+        
+        if (states[size-1]==0 && cellLife==3){
+            state=1;
+        }else if(states[size-1]==1 && (cellLife==2 || cellLife==3)){
+            state=1;
+        }
+        
+        return state;
     }
+       
+    
+    
+    
+    
 }
